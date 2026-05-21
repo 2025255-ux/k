@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遅延発動型フリーズテスト</title>
+</head>
+<body style="font-family: sans-serif; text-align: center; margin-top: 50px; background-color: #ffe6e6;">
+
+    <h1 style="color: red;">【警告】高負荷処理ページへようこそ</h1>
+    <p>ページの読み込みが完了しました。</p>
+    <p><strong>1秒後にシステムに限界まで負荷をかけ、この画面のまま完全にフリーズします...</strong></p>
+    
+    <div id="status" style="margin-top: 30px; font-size: 20px; font-weight: bold;">
+        状態：正常（あと1秒でフリーズします）
+    </div>
+
+    <script>
+        // ページ内の画像や文字が「すべて読み込まれた後」に発動する設定
+        window.addEventListener('load', function() {
+            
+            // 画面が描画される時間を確保するため、1秒（1000ミリ秒）だけ待つ
+            setTimeout(function() {
+                
+                // フリーズ直前に文字を書き換える（書き換わった瞬間に固まります）
+                document.getElementById('status').innerText = "状態：フリーズしました（操作不能）";
+                document.getElementById('status').style.color = "red";
+
+                // ここからブラウザの処理能力をすべて奪う無限ループ
+                let data = [];
+                while (true) {
+                    // メモリ負荷
+                    data.push("CRASH_TEST_DELAYED_START".repeat(20000));
+                    // CPU負荷
+                    let heavyCalc = Math.sin(Math.random()) * Math.cos(Math.random()) * Math.sqrt(99999999);
+                }
+                
+            }, 1000); // ここを「3000」にすれば3秒後になります
+            
+        });
+    </script>
+
+</body>
+</html>
